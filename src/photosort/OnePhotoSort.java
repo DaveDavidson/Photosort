@@ -63,32 +63,20 @@ public class OnePhotoSort {
                                 + counter.id);
                         
                         // Bild umbenennen
-//////                        File tempname = new File(pictureDate);
-//////                        
-//////                        System.out.println("Name vor Rename: " + jpegFile.getName());
-//////                        
-//////                        System.out.println("Gewünschter Name nach Rename: " + pictureDate);
-//////
-//////                        if (jpegFile.renameTo((tempname))) {
-//////                            System.out.println("Renamed");
-//////                        } else {
-//////                            System.out.println("Error");
-//////                        }
-//////                        
-//////                        System.out.println("Name nach Rename: " + jpegFile.getName());
+                        File newName = new File(jpegFile.getParentFile() + "/" + pictureDate + ".jpg");
+                                                
+                        System.out.println("Name vor Rename: " + jpegFile.getName());
                         
-                        File fSrc = jpegFile;
-                        File fDes = new File("C:/Users/eccomania/Desktop/Testbilder/" + pictureDate + ".jpg");
-                        FileInputStream fis = new FileInputStream(fSrc);
-                        FileOutputStream fos = new FileOutputStream(fDes);
+                        System.out.println("Gewünschter Name nach Rename: " + pictureDate + ".jpg");
+
+                        if (jpegFile.renameTo((newName))) {
+                            System.out.println("Renamed");
+                        } else {
+                            System.out.println("Error");
+                        }
                         
-                        byte buf[] = new byte[1024];
-                        while (fis.read(buf) != -1) {
-                            fos.write(buf);
-                    }
-                        fis.close();
-                        fos.flush();
-                        fos.close();
+                        System.out.println("Name nach Rename: " + newName.getName());
+                        
                         
                     } catch (Exception exp) {
                         exp.toString();
