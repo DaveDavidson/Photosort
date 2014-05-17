@@ -10,9 +10,6 @@ import com.drew.imaging.jpeg.JpegMetadataReader;
 import com.drew.imaging.jpeg.JpegProcessingException;
 import com.drew.metadata.Metadata;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -24,6 +21,11 @@ import java.util.Date;
  */
 public class OnePhotoSort {
     
+    /**
+     * 
+     * @param args
+     * @throws IOException 
+     */
     public static void main(String[] args) throws IOException {
         
         File jpegFile = new File("C:/Users/eccomania/Desktop/Testbilder/123.jpg");
@@ -52,6 +54,7 @@ public class OnePhotoSort {
                         Counter counter = new Counter();
 
                         // Format für Datum festlegen
+                        // TODO: der Name sieht total doof aus. :P
                         DateFormat df = new SimpleDateFormat("yyyy_MM_dd, HH_mm_ss");
 
                         // Datum der Bilder holen und unter pictureDate speichern
