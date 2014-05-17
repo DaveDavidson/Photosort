@@ -18,9 +18,8 @@ public class PhotoSort {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        //File jpegFile = new File("C:/Users/eccomania/Desktop/Testbilder/4.jpg");
-
-        // Auslesen eines Ordners in eine Liste
+        
+        // Auslesen von Bildern eines Ordners in eine Liste
         File f = new File("C:/Users/eccomania/Desktop/Testbilder");
         File[] fileArray = f.listFiles();
 
@@ -41,11 +40,14 @@ public class PhotoSort {
                 }
             }
 
-            System.out.println("Anzahl Unterordner: " + anzahlunterordner
-                    + ", Anzahl Bilder: " + anzahlbilder);
-        }
+//            System.out.println("Anzahl Unterordner: " + anzahlunterordner
+//                    + ", Anzahl Bilder: " + anzahlbilder);
+            }
+
         //Metadaten auslesen
         Metadata metadata = null;
+        
+        Integer zaehler = 0;
 
         if (fileArray != null) {
             for (File fileArray1 : fileArray) {
@@ -53,7 +55,11 @@ public class PhotoSort {
                     metadata = JpegMetadataReader.readMetadata(fileArray1);
                 } catch (JpegProcessingException ex) {
                     ex.printStackTrace();
-                }   // iterate through metadata directories
+                }// catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+                
+                // iterate through metadata directories
                 if (metadata != null) {
                     com.drew.metadata.exif.ExifSubIFDDirectory directory
                             = metadata.getDirectory(com.drew.metadata.exif.ExifSubIFDDirectory.class);
@@ -76,39 +82,49 @@ public class PhotoSort {
                         // + laufende Nummer
                         System.out.println("Date of picture: " + pictureDate + " "
                                 + counter.id);
+                        
+                        // Bild umbenennen durch 'move'
+                        File newName = new File(fileArray1.getParentFile() + "/" + pictureDate + ".jpg");
+                                                
+                        System.out.println("Name vor Rename: " + fileArray1.getName());
+                        
+                        System.out.println("Gewünschter Name nach Rename: " + pictureDate + ".jpg");
 
-//                        // FileArray mit Namen der Bilder umbenennen
-//                        File tempname = new File(pictureDate);
-//                        System.out.println(tempname);
-//                        
-//                        fileArray1.renameTo(new File(pictureDate));
-                        // Bilder im Quellordner umbenennen
-                        // Versuch mit STREAMS
-                        FileWriter fw = null;
-                        try {
-                            fw = new FileWriter(fileArray1.getName() + ".jpg");
-                            fw.write(pictureDate);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } finally {
-                            if (fw != null) {
-                                try {
-                                    fw.close();
-                                } catch (IOException e) {
-                                }
-                            }
+                        if (fileArray1.renameTo((newName))) {
+                            System.out.println("Successfully renamed");
+                        } else {
+                            System.out.println("Error");
                         }
-
+                        
+                        System.out.println("Name nach Rename: " + newName.getName());
+                        
+                        // Zähler, zum Überprüfen, ob alle Bilder umbenannt wurden
+                        zaehler++;
+                        
+                        // Neuen Unterordner anlegen mit Datum EINMALIG
+                        
+                        
+                        // Bild mit neuem Datum in passenden Unterordner verschieben
+                        if (newName.renameTo((newName))) {
+                            System.out.println("Successfully moved");
+                        } else {
+                            System.out.println("Error while trying to move");
+                        }
+                        
+                        // Sortieren der Bilder nach Name
+                        
+                        
                     } catch (Exception exp) {
                         exp.toString();
                     }
                 }
             }
         }
-
-//        // Hinweis, wenn nicht alle Bilder ausgelesen werden konnten
-//        if (anzahlbilder != counter.id) {
-//            System.out.println("Es konnten nicht alle Bilder ausgelesen werden.");
-//        }
+        // Überprüfen, ob alle Bilder umbenannt wurden und Meldung
+        if(zaehler == anzahlbilder) {
+            System.out.println("Es wurden alle " + zaehler + "Bilder umbenannt!" );    
+        } else {
+            System.out.println("Achtung, es konnten nicht alle Bilder umbenannt werden!");
+        }
     }
 }
