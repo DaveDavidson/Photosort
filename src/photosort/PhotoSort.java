@@ -6,6 +6,7 @@ import com.drew.metadata.Metadata;
 import java.io.File;
 import java.io.IOException;
 import java.io.*;
+import java.lang.Object;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -86,9 +87,9 @@ public class PhotoSort {
                         // Bild umbenennen durch 'move'
                         File newName = new File(fileArray1.getParentFile() + "/" + pictureDate + ".jpg");
                                                 
-                        System.out.println("Name vor Rename: " + fileArray1.getName());
+                        // System.out.println("Name vor Rename: " + fileArray1.getName());
                         
-                        System.out.println("Gewünschter Name nach Rename: " + pictureDate + ".jpg");
+                        // System.out.println("Gewünschter Name nach Rename: " + pictureDate + ".jpg");
 
                         if (fileArray1.renameTo((newName))) {
                             System.out.println("Successfully renamed");
@@ -96,20 +97,46 @@ public class PhotoSort {
                             System.out.println("Error");
                         }
                         
-                        System.out.println("Name nach Rename: " + newName.getName());
+                        // System.out.println("Name nach Rename: " + newName.getName());
+                        
+                        // Jahreszahl des  Bildes entnehmen
+                        String str = newName.getName();
+                        String jahreszahl = new String(str.substring(0, 4));
                         
                         // Zähler, zum Überprüfen, ob alle Bilder umbenannt wurden
                         zaehler++;
                         
-                        // Neuen Unterordner anlegen mit Datum EINMALIG
-                        
-                        
+                        // Neuen Unterordner anlegen mit Datum; EINMALIG
                         // Bild mit neuem Datum in passenden Unterordner verschieben
-                        if (newName.renameTo((newName))) {
-                            System.out.println("Successfully moved");
+                        
+                        File yeardir = new File(newName.getParentFile() + "/" + jahreszahl);
+                        // system.out: "C:/Users/eccomania/Desktop/Testbilder/JAHRESZAHL"
+                        
+                        File namefile = new File(str);
+                        // system.out: Name des Bildes
+                        
+                        File newfiledir = new File(yeardir + "/" + namefile);
+                        // system.out: "C:/Users/eccomania/Desktop/Testbilder/JAHRESZAHL/Name des Bildes"
+                        
+                        if(yeardir.isDirectory()){
+                            if (newName.renameTo(newfiledir)) {
+                                System.out.println("Successfully moved");
+                            } else {
+                                System.out.println("Error while trying to move");
+                            }
                         } else {
-                            System.out.println("Error while trying to move");
+                            yeardir.mkdir();
+                            // Ordner mit Jahreszahl erstellen, falls noch nicht vorhanden
+                            
+                            System.out.println("Ordner mit dem Namen '" + jahreszahl + "' wurde erstellt");
+                            
+                            if (newName.renameTo(newfiledir)) {
+                                System.out.println("Successfully moved");
+                            } else {
+                                System.out.println("Error while trying to move");
+                            }
                         }
+                        
                         
                         // Sortieren der Bilder nach Name
                         
@@ -122,7 +149,7 @@ public class PhotoSort {
         }
         // Überprüfen, ob alle Bilder umbenannt wurden und Meldung
         if(zaehler == anzahlbilder) {
-            System.out.println("Es wurden alle " + zaehler + "Bilder umbenannt!" );    
+            System.out.println("Es wurden alle " + zaehler + " Bilder umbenannt!" );    
         } else {
             System.out.println("Achtung, es konnten nicht alle Bilder umbenannt werden!");
         }
