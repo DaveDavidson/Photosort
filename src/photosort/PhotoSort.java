@@ -17,22 +17,25 @@ public class PhotoSort {
     
     public static Integer zaehler = 0;
     
-    //Ausgabe aller Dateien im Verzeichnis inkl. Art der Datei (deaktiviert)
-    // + counter für Gesamtanzahl
     public static Integer anzahlunterordner = 0;
+    
+    public static Boolean unterordner;
     
     /**
      *
      * @param args
      * @param argsziel
+     * @param b
      * @throws IOException
      */
-    public static void main(String args, String argsziel) throws IOException {
+    public static void main(String args, String argsziel, Boolean b) throws IOException {
         
         //Übergabe des Strings eines Ordners zum Auslesen der Dateien in ein File-Array
         File f = new File(args);
         File[] fileArray1 = f.listFiles();
         zieldest = argsziel;
+        
+        unterordner = b;
         
         runPhotoSort(fileArray1);
         
@@ -60,11 +63,15 @@ public class PhotoSort {
                 if(fileArray1.isDirectory()) {
                     // Anzahl Unterordner
                     anzahlunterordner++;
-                    String rekursion = fileArray1.getParent()+ System.getProperty("file.separator") + fileArray1.getName();
-                    File fil = new File(rekursion);
-                    File[] rek = fil.listFiles();
-                    runPhotoSort(rek);
                     
+                    if(unterordner) {
+                        String rekursion = fileArray1.getParent()+ System.getProperty("file.separator") + fileArray1.getName();
+                        File fil = new File(rekursion);
+                        File[] rek = fil.listFiles();
+                        runPhotoSort(rek);
+                    } else {
+                        continue;
+                    }
                 } else if(fileArray1.isFile()) {
                     // Anzahl Bilder
                     anzahlbilder++;

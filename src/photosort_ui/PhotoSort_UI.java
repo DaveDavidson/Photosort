@@ -7,7 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
-import javax.swing.border.Border;
 
 //public class PhotoSort_UI{
 
@@ -23,6 +22,8 @@ public class PhotoSort_UI {
     public static JFrame frame;
     public static boolean shouldFill = true;
     public static boolean shouldWeightX = true;
+    public static boolean unterordner = false;
+    public static JRadioButton unterordnerButton;
     
     public static void main(String args[]){
         
@@ -99,7 +100,6 @@ public class PhotoSort_UI {
             c.weightx = 0.5;
             c.gridx = 1;
             c.gridy = 0;
-            p.add(openButtonZiel, c); 
             
             // ActionListener für Zielornder-Button   
             openButtonZiel.addActionListener(new ActionListener() {
@@ -135,6 +135,19 @@ public class PhotoSort_UI {
             textfeldziel.add(zielpfad);
             p.add(textfeldziel, c);         
             
+/*----------------------------------------------------------------------------*/            
+            // 'Unterordner'-Button
+            unterordnerButton = new JRadioButton("Unterordner einbeziehen?");
+            
+            c.fill = GridBagConstraints.NONE;
+            c.anchor = GridBagConstraints.CENTER;
+            c.ipady = 20;
+            c.weightx = 0.0;
+            c.gridwidth = 3;
+            c.gridx = 0;
+            c.gridy = 2;
+            
+            p.add(unterordnerButton, c);
             
 /*----------------------------------------------------------------------------*/            
             // 'Sortieren'-Button
@@ -146,7 +159,7 @@ public class PhotoSort_UI {
             c.weightx = 0.0;
             c.gridwidth = 3;
             c.gridx = 0;
-            c.gridy = 2;
+            c.gridy = 3;
             
             // ActionListener für 'Sortieren'-Button
             sortieren.addActionListener(new ActionListener() {
@@ -161,6 +174,7 @@ public class PhotoSort_UI {
             p.add(sortieren, c);
 
  /*----------------------------------------------------------------------------*/           
+            // 'Beenden'-Button
             JButton beenden = new JButton("Beenden");
             c.fill = GridBagConstraints.HORIZONTAL;
             c.ipady = 0;       //reset to default
@@ -169,7 +183,7 @@ public class PhotoSort_UI {
             c.insets = new Insets(10,0,0,0);  //top padding
             c.gridx = 1;       //aligned with button 2
             c.gridwidth = 2;   //2 columns wide
-            c.gridy = 3;       //third row
+            c.gridy = 4;       //forth row
             
             // ActionListener für 'Benden'-Button
             beenden.addActionListener(new ActionListener() {
@@ -234,10 +248,15 @@ public class PhotoSort_UI {
     
     public static void Sortieren() {
         
+        // Boolean unterordner auf true setzen, wenn JRadioButton unterordnerButton aktiviert wurde
+        if (unterordnerButton.isSelected() == true) {
+             unterordner = true;
+        }
+        
         // Falls kein Zielordner gewählt wurde -> Fehlermeldung
         if (filename != null && filenameziel != null) {
             try{
-                photosort.PhotoSort.main(filename, filenameziel);
+                photosort.PhotoSort.main(filename, filenameziel, unterordner);
             } catch (IOException ex) {
                 System.out.println(ex);
             }
