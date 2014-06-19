@@ -154,18 +154,14 @@ public class PhotoSort_UI {
                 @Override
                 public void actionPerformed(ActionEvent e) {
 
-                    try{
-                        photosort.PhotoSort.main(filename, filenameziel);
-                    } catch (IOException ex) {
-                        System.out.println(ex);
-                    }   
+                    Sortieren();
                 }
             });
             
             p.add(sortieren, c);
 
  /*----------------------------------------------------------------------------*/           
-            JButton button5 = new JButton("5");
+            JButton beenden = new JButton("Beenden");
             c.fill = GridBagConstraints.HORIZONTAL;
             c.ipady = 0;       //reset to default
             c.weighty = 1.0;   //request any extra vertical space
@@ -174,7 +170,38 @@ public class PhotoSort_UI {
             c.gridx = 1;       //aligned with button 2
             c.gridwidth = 2;   //2 columns wide
             c.gridy = 3;       //third row
-            p.add(button5, c);
+            
+            // ActionListener für 'Benden'-Button
+            beenden.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                    close();  
+                }
+                
+                // Private subclass close() zum Beenden der Anwedung
+                private void close() {
+                    
+                    JFrame frame2 = new JFrame();
+                    int optionPane = JOptionPane.showConfirmDialog(frame2, "Wollen Sie das Programm wirklich schließen?");
+                    
+                    frame2.pack();
+                    frame2.setVisible(true);
+                    
+                    if(optionPane == JOptionPane.YES_OPTION) {                    
+                        frame.setVisible(false);
+                        frame.dispose();
+                        frame2.setVisible(false);
+                        frame2.dispose();
+                    } else {
+                        frame2.setVisible(false);
+                        frame2.dispose();
+                    }
+                }
+            });
+            
+            p.add(beenden, c);
             
             // Panel p in Frame frame einfügen
             frame.add(p);
@@ -203,6 +230,23 @@ public class PhotoSort_UI {
         File f = fcziel.getSelectedFile();
         filenameziel = f.getAbsolutePath();
         zielpfad.setText(filenameziel);
+    }
+    
+    public static void Sortieren() {
+        
+        // Falls kein Zielordner gewählt wurde -> Fehlermeldung
+        if (filename != null && filenameziel != null) {
+            try{
+                photosort.PhotoSort.main(filename, filenameziel);
+            } catch (IOException ex) {
+                System.out.println(ex);
+            }
+        } else if (filename != null && filenameziel == null){
+            JOptionPane.showMessageDialog(frame,
+            "Wählen Sie bitte einen Zielordner über die angegebene Schaltfläche.",
+            "Zielordner fehlt",
+            JOptionPane.ERROR_MESSAGE);
+        } 
     }
     
     public static void Erfolgsmeldung(Boolean b, String s) {
